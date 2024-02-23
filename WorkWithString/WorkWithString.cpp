@@ -1,39 +1,27 @@
 ﻿#include <iostream>
-#include <string> 
-using namespace std;
+#include <string>
 
-//В строке текста записаны слова, разделенные пробелами в произвольном количестве. Сжатие текста состоит 
-//в том, что между словами оставляется по одному пробелу, а после последнего слова пробелы удаляются(пробелы
-//перед первым словом сохраняются).Если строка содержит только пробелы, то все они сохраняются.
-//Написать функцию, сжимающую описанным образом текст.
+using namespace std;
 
 void compressText(const string& input) {
     string compressedText;
-    bool isFirstWord = true;
+    bool isFirstSpace = true;
 
     for (char c : input) {
-
         if (isalpha(c) || ispunct(c) || isdigit(c)) {
-
             compressedText.push_back(c);
-            isFirstWord = false;
+            isFirstSpace = false;
         }
-        else if (c == ' ' && !isFirstWord) {
+        else if (c == ' ' && isFirstSpace) {
             compressedText.push_back(c);
-            isFirstWord = true;
+        }
+        else if (c == ' ' && !isFirstSpace) {
+            if (!isspace(compressedText.back())) {
+                compressedText.push_back(c);
+            }
         }
     }
     cout << "Text: " << compressedText;
-}
-
-bool nonAlphaNum(const string& str) {
-    for (char c : str) {
-
-        if (!isalnum(c) && !isspace(c) && !ispunct(c)) {
-            return true;
-        }
-    }
-    return false;
 }
 
 int main() {
@@ -42,7 +30,15 @@ int main() {
     cout << "Enter text: ";
     getline(cin, inputText);
 
-    if (!nonAlphaNum(inputText)) {
+    bool isOnlySpaces = true;
+    for (char c : inputText) {
+        if (!isspace(c)) {
+            isOnlySpaces = false;
+            break;
+        }
+    }
+
+    if (isOnlySpaces) {
         cout << "Text: " << inputText;
     }
     else {
@@ -51,6 +47,7 @@ int main() {
 
     return 0;
 }
+
 
 
 
